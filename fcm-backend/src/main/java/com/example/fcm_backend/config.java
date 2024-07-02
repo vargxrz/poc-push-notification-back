@@ -12,9 +12,9 @@ public class config  implements WebMvcConfigurer{
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("*")  // Substitua pelo domínio que você deseja permitir
-                .allowedMethods("*")  // Métodos permitidos
-                .allowedHeaders("*")  // Cabeçalhos permitidos
-                .allowCredentials(true);  // Permite enviar credenciais
+                .allowedOrigins("*")
+                .allowedMethods("*")
+                .allowedHeaders("*")
+                .allowCredentials(true);
     }
 }
