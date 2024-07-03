@@ -13,7 +13,7 @@ public class WebConfig  {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
+                registry.addMapping("https://poc-push-notification-tawny.vercel.app/**")
                         .allowedMethods("*")
                         .allowedOrigins("*")
                         .allowedHeaders("*");
