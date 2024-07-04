@@ -14,10 +14,9 @@ public class WebConfig  {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH")
-                        .allowedOrigins("https://poc-push-notification-back.vercel.app/")
-                        .allowedHeaders("Authorization", "Content-Type", "X-Requested-With")
-                        .allowCredentials(true);
+                        .allowedMethods("*")
+                        .allowedOrigins("*")
+                        .allowedHeaders("*");
             }
         };
     }

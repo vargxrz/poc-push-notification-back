@@ -82,5 +82,3 @@ public class FCMController {
         private String body;
     }
 }
-
-
