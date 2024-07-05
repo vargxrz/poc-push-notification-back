@@ -1,27 +1,18 @@
 package com.example.fcm_backend;
 
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
-import com.google.firebase.messaging.MulticastMessage;
-import com.google.firebase.messaging.Notification;
 import lombok.Data;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/fcm")
 public class FCMController {
 
-    private static final Logger logger = LoggerFactory.getLogger(FCMController.class);
-
     @Autowired
-    private TokenRepository tokenRepository;
+    private TokenService tokenService;
 
     @PostMapping("/register-token")
     public ResponseEntity<String> registerToken(@RequestBody TokenRequest tokenRequest) {
@@ -29,56 +20,31 @@ public class FCMController {
             return ResponseEntity.badRequest().body("Token is required");
         }
 
-        if (tokenRepository.existsByToken(tokenRequest.getToken())) {
-            return ResponseEntity.ok("Token already registered");
+        tokenService.registerToken(tokenRequest.getToken());
+
+        try {
+            tokenService.sendNotification(tokenRequest.getToken(), "Bem-vindo!", "Seu token foi registrado com sucesso.");
+        } catch (FirebaseMessagingException e) {
+            return ResponseEntity.status(500).body("Erro ao enviar a notificação: " + e.getMessage());
         }
 
-        Token newToken = new Token();
-        newToken.setToken(tokenRequest.getToken());
-        tokenRepository.save(newToken);
-
-        return ResponseEntity.ok("Token registered");
+        return ResponseEntity.ok("Token registrado e notificação enviada");
     }
 
     @PostMapping("/send-notification")
-    public ResponseEntity<String> sendNotification(@RequestBody NotificationRequest notificationRequest) {
-        if (notificationRequest.getTitle() == null || notificationRequest.getBody() == null) {
-            return ResponseEntity.badRequest().body("Title and body are required");
-        }
-
-        List<Token> tokens = tokenRepository.findAll();
-
-        Notification notification = Notification.builder()
-                .setTitle(notificationRequest.getTitle())
-                .setBody(notificationRequest.getBody())
-                .build();
-
-        MulticastMessage message = MulticastMessage.builder()
-                .setNotification(notification)
-                .addAllTokens(tokens.stream().map(Token::getToken).toList())
-                .build();
-
+    public ResponseEntity<String> sendNotification(@RequestBody TokenRequest tokenRequest) {
         try {
-            FirebaseMessaging.getInstance().sendMulticast(message);
-            return ResponseEntity.ok("Notification sent");
+            tokenService.sendNotification(tokenRequest.getToken(), tokenRequest.getTitle(), tokenRequest.getMessage());
+            return ResponseEntity.ok("Notificação enviada");
         } catch (FirebaseMessagingException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error sending notification");
+            return ResponseEntity.status(500).body("Erro ao enviar a notificação: " + e.getMessage());
         }
-    }
-
-    @GetMapping("/tokens")
-    public List<Token> getTokens() {
-        return tokenRepository.findAll();
     }
 
     @Data
     static class TokenRequest {
         private String token;
-    }
-
-    @Data
-    static class NotificationRequest {
+        private String message;
         private String title;
-        private String body;
     }
 }
