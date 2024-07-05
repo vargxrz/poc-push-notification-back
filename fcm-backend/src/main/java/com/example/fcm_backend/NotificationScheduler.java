@@ -17,7 +17,6 @@ public class NotificationScheduler {
 }
 
 //Explicação da Expressão Cron
-//"0 0 9 * * ?": Esta expressão cron execute a tarefa às 9:00 AM todos os dias.
 //0: Segundo (0 segundos)
 //0: Minuto (0 minutos)
 //9: Hora (9 AM)

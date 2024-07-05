@@ -15,7 +15,7 @@ public class WebConfig  {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedMethods("*")
-                        .allowedOrigins("*")
+                        .allowedOrigins("https://poc-push-notification-front.vercel.app")
                         .allowedHeaders("*");
             }
         };
