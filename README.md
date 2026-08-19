@@ -4,31 +4,7 @@ Backend em Spring Boot para envio de push notifications via Firebase Cloud Messa
 
 ## Arquitetura
 
-```mermaid
-graph TD
-    Client["📱 Mobile / Web Client"]
-
-    subgraph Backend["Spring Boot Backend"]
-        Controller["NotificationController\n/api/notifications"]
-        DeviceTokenSvc["DeviceTokenService\nGestão de tokens"]
-        FCMSvc["FirebaseNotificationService\nIntegração FCM"]
-        Scheduler["NotificationScheduler\nCron diário"]
-        Repo["DeviceTokenRepository\nJPA / H2"]
-        Handler["GlobalExceptionHandler"]
-    end
-
-    Firebase["☁️ Firebase Cloud Messaging"]
-
-    Client -->|"POST /register\nPOST /send"| Controller
-    Controller --> DeviceTokenSvc
-    Controller --> FCMSvc
-    Scheduler --> FCMSvc
-    FCMSvc --> DeviceTokenSvc
-    DeviceTokenSvc --> Repo
-    FCMSvc -->|"Firebase Admin SDK"| Firebase
-    Firebase -->|"Push notification"| Client
-    Handler -.->|"trata exceções"| Controller
-```
+![Arquitetura](https://mermaid.ink/img/Z3JhcGggVEQKICAgIENsaWVudFsi8J+TsSBDbGllbnQiXQogICAgc3ViZ3JhcGggQmFja2VuZFsiU3ByaW5nIEJvb3QiXQogICAgICAgIENvbnRyb2xsZXJbIk5vdGlmaWNhdGlvbkNvbnRyb2xsZXIiXQogICAgICAgIFRva2VuU3ZjWyJEZXZpY2VUb2tlblNlcnZpY2UiXQogICAgICAgIEZDTVN2Y1siRmlyZWJhc2VOb3RpZmljYXRpb25TZXJ2aWNlIl0KICAgICAgICBTY2hlZHVsZXJbIk5vdGlmaWNhdGlvblNjaGVkdWxlciJdCiAgICAgICAgUmVwb1siRGV2aWNlVG9rZW5SZXBvc2l0b3J5IC8gSDIiXQogICAgICAgIEhhbmRsZXJbIkdsb2JhbEV4Y2VwdGlvbkhhbmRsZXIiXQogICAgZW5kCiAgICBGaXJlYmFzZVsi4piB77iPIEZpcmViYXNlIENsb3VkIE1lc3NhZ2luZyJdCiAgICBDbGllbnQgLS0tIENvbnRyb2xsZXIKICAgIENvbnRyb2xsZXIgLS0tIFRva2VuU3ZjCiAgICBDb250cm9sbGVyIC0tLSBGQ01TdmMKICAgIFNjaGVkdWxlciAtLS0gRkNNU3ZjCiAgICBGQ01TdmMgLS0tIFRva2VuU3ZjCiAgICBUb2tlblN2YyAtLS0gUmVwbwogICAgRkNNU3ZjIC0tLSBGaXJlYmFzZQogICAgRmlyZWJhc2UgLS0tIENsaWVudAogICAgSGFuZGxlciAtLi0gQ29udHJvbGxlcgo=)
 
 **Stack:** Java 17 · Spring Boot 3.3 · Firebase Admin SDK 8 · H2 · Swagger UI
 
