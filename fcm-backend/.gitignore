@@ -31,3 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Firebase credentials ###
+**/resources/serviceAccountKey.json
+**/resources/*.json
+keystore.p12

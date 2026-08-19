@@ -1,4 +1,4 @@
-package com.example.fcm_backend;
+package com.example.fcm_backend.config;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
@@ -13,9 +13,7 @@ public class FirebaseConfig {
 
     @Bean
     public FirebaseApp firebaseApp() throws IOException {
-        GoogleCredentials credentials = GoogleCredentials.fromStream(
-                getClass().getClassLoader().getResourceAsStream("serviceAccountKey.json")
-        );
+        GoogleCredentials credentials = GoogleCredentials.getApplicationDefault();
         FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(credentials)
                 .build();

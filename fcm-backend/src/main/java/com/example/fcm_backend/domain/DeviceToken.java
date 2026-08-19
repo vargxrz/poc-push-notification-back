@@ -1,12 +1,13 @@
-package com.example.fcm_backend;
+package com.example.fcm_backend.domain;
 
 import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "tokens")
+@Table(name = "device_tokens")
 @Data
-public class Token {
+public class DeviceToken {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
